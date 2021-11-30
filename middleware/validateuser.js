@@ -7,6 +7,6 @@ module.exports = async(req ,res ,next)=>{
         next()
     }
     catch(err){
-        res.status(400).send(err.message)
+        res.render('register',{message:err.message})
     }    
 }

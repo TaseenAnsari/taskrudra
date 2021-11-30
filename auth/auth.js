@@ -20,20 +20,20 @@ module.exports.validatePassword = async (password, encrypPassword) => {
     }
 }
 
-module.exports.genrateToken = async(username)=>{
+module.exports.genrateToken = async(payload,secrate)=>{
     try {
-        return await jwt.sign(username,'secrate',{ expiresIn: 60*10});
+        return jwt.sign(payload,secrate,{ expiresIn:'10m'});
     }
     catch (err) {
         console.log(err.message)
     }
     
 }
-module.exports.verifyToken = async (token) => {
+module.exports.verifyToken = async (token , secrate) => {
     try {
-        return await jwt.verify(token)
+        return jwt.verify(token,secrate)
     }
     catch (err) {
-        console.log(err.message)
+        return err.message
     }
 }

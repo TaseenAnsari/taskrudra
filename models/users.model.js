@@ -55,6 +55,20 @@ const userValidate = Joi.object({
     status: Joi.boolean()
 })
 
+const loginValidate = Joi.object({
+    username: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+
+    password: Joi.string()
+    .min(8)
+    .required(),
+})
+
 
 module.exports.userValidate = userValidate; 
 module.exports.User = User;
+
+module.exports.loginValidate = loginValidate;

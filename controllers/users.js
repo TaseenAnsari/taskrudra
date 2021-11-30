@@ -1,43 +1,52 @@
-const { REFUSED } = require('dns');
+const { Mongoose } = require('mongoose')
 const { User } = require('../models/users.model')
-const {encryption , validatePassword ,genrateToken} = require('../auth/auth')
 
 
-module.exports.getUsers = async (req, res, next) => {
+module.exports.index = async (req, res, next) => {
     try {
-        const result = await User.find(req.query);
+        console.log(req.body)   
+        res.render('index',{data: await User.find({}),username:req.body.username})
 
-        res.send(await genrateToken({username:"taseenansari"}))
-    }
-    catch (err) {
-        res.status(400).send(err.message);
-    }
-}
-
-module.exports.createUsers = async (req, res, next) => {
-    try {
-        const Users = new User(req.body)
-        res.send(await Users.save())
     }
     catch (err) {
         res.status(400).send(err.message)
     }
 }
 
-module.exports.updateUsers = async (req, res, next) => {
+module.exports.deleteuser = async (req, res, next) => {
     try {
+        const user = await User.deleteOne({_id:req.params.id})
+        res.redirect('/')
 
     }
     catch (err) {
-        res.status(400).send(err.message);
+        res.status(400).send(err.message)
     }
 }
 
-module.exports.deleteUsers = async (req, res, next) => {
+module.exports.updateuser = async (req, res, next) => {
     try {
+        const user = await User.find({_id:req.params.id})
+        res.render('update',{message:"",email:user[0].email,status:user[0].status,id:user[0]._id})
 
     }
     catch (err) {
-        res.status(400).send(err.message);
+        res.status(400).send(err.message)
+    }
+}
+
+module.exports.update = async (req, res, next) => {
+    try {
+        if(!req.body.status) statusone = false
+        else statusone = true
+        const user = await User.updateOne({_id:req.params.id},{$set:{
+            email:req.body.email,
+            status:statusone
+        }})
+        res.redirect('/')
+
+    }
+    catch (err) {
+        res.status(400).send(err.message)
     }
 }
