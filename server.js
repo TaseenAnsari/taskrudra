@@ -30,4 +30,4 @@ app.use('/', userAuth)
 
 
 //start server
-module.exports = app.listen(port, () => console.log("connect to port",port))
+module.exports = app.listen(process.env.PORT|| port, () => console.log("connect to port",port))
