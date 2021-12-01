@@ -5,7 +5,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const users = require('./routes/users.route')
 const userAuth = require('./routes/userAuth.route');
-
+const helmet = require('helmet');
+const compression = require('compression')
 //Database Connection
 require('./models/connection.db')(); 
 
@@ -15,6 +16,8 @@ const port = config.get('port') || 5500
 
 
 //middleware settings
+app.use(helmet())
+app.use(compression())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.set('view engine', 'ejs')
