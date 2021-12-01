@@ -49,8 +49,8 @@ module.exports.userResetPass = async (req, res, next) => {
 }
 module.exports.loginUser = async (req, res, next) => {
     try {
-        if(!req.cookies.token) return res.render('login', { user: "", message: "" })
-        if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('login', { user: "", message: "" })
+        if(!req.cookies.token) return res.render('login', { user: "", message: "",type:"" })
+        if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('login', { user: "", message: "session expired" ,type:"danger"})
         res.redirect('/')
     }
     catch (err) {
@@ -78,7 +78,7 @@ module.exports.login = async (req, res, next) => {
         res.redirect('/')
     }
     catch (err) {
-        res.render('login', { user: '', message: err.message })
+        res.render('login', { user: '', message: err.message,type:"danger" })
     }
 }
 
@@ -89,8 +89,7 @@ module.exports.register = async (req, res, next) => {
         const user = new User(req.body);
         result = await user.save();
 
-
-        res.render('login', { user: result, message: "" })
+        res.render('login', { user: result, message: "User Successfuly Registered" ,type:"success"})
 
     }
     catch (err) {
@@ -129,7 +128,7 @@ module.exports.resetPass = async (req, res, next) => {
         })
         res.cookie("id","")
         res.cookie("linktoken","")
-        res.render('login',{user:"",message:"password changed"})
+        res.render('login',{user:"",message:"password changed",type:"success"})
     }
     catch (err) {
         res.status(400).send('link has been Already used')
