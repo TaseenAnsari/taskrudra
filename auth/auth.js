@@ -24,7 +24,7 @@ module.exports.validatePassword = async (password, encrypPassword) => {
 //generate token
 module.exports.genrateToken = async(payload,secrate)=>{
     try {
-        return jwt.sign(payload,secrate,{ expiresIn:'10m'});
+        return jwt.sign(payload,secrate,{ expiresIn:'10s'});
     }
     catch (err) {
         console.log(err.message)
