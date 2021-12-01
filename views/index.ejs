@@ -30,12 +30,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#"><%- username%><span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#">
+                        <%- username%><span class="sr-only">(current)</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="logout">Logout</a>
+                    <form method="post" action="/logout" class="col">
+                        <input type="submit" class="btn btn-sm btn-warning" value="Logout">
+                    </form>
                 </li>
-
             </ul>
         </div>
     </nav>
@@ -67,33 +70,37 @@
                                 <%- data[i].email %>
                             </td>
                             <td>
-                                <%- data[i].status %>
+                                <% if(!username===data[i].status){ %>
+                                    De-Active
+                                    <%} else{ %>
+                                        Active
+                                        <% } %>
                             </td>
                             <% if(username===data[i].username){ %>
-                                <td>
-                                    No Action
+                                <td class="row">
+                                    <form class="col" method="" action="">
+                                        <input type="submit" class="btn btn-sm btn-secondary" value="Delete" disabled>
+                                    </form>
+                                    <form method="get" action="/api/updateuser/<%- data[i]._id %>" class="col">
+                                        <input type="submit" class="btn btn-sm btn-info" value="Update">
+                                    </form>
                                 </td>
                                 <%} else{ %>
-                            <td class="row">
-                                <form method="post" action="/deleteuser/<%- data[i]._id %>" class="col">
-                                    <input type="submit" class="btn btn-sm btn-danger" value="Delete">
-                                </form>
-                                <form method="get" action="/updateuser/<%- data[i]._id %>" class="col">
-                                    <input type="submit" class="btn btn-sm btn-info" value="Update">
-                                </form>
-                            </td>
-                            <% } %>
+                                    <td class="row">
+                                        <form method="post" action="/api/deleteuser/<%- data[i]._id %>" class="col">
+                                            <input type="submit" class="btn btn-sm btn-danger" value="Delete">
+                                        </form>
+                                        <form method="get" action="/api/updateuser/<%- data[i]._id %>" class="col">
+                                            <input type="submit" class="btn btn-sm btn-info" value="Update">
+                                        </form>
+                                    </td>
+                                    <% } %>
                         </tr>
                         <% } %>
                 </tbody>
             </table>
         </div>
     </section>
-
-
-
-    <script>
-    </script>
 </body>
 
 </html>

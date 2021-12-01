@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-
+//encrypting password
 module.exports.encryption = async (password) => {
     try {
         return await bcrypt.hash(password, 10)
@@ -11,6 +11,7 @@ module.exports.encryption = async (password) => {
     }
 }
 
+//decrypting password and compare 
 module.exports.validatePassword = async (password, encrypPassword) => {
     try {
         return await bcrypt.compare(password, encrypPassword)
@@ -20,6 +21,7 @@ module.exports.validatePassword = async (password, encrypPassword) => {
     }
 }
 
+//generate token
 module.exports.genrateToken = async(payload,secrate)=>{
     try {
         return jwt.sign(payload,secrate,{ expiresIn:'10m'});
@@ -29,6 +31,8 @@ module.exports.genrateToken = async(payload,secrate)=>{
     }
     
 }
+
+//verify token
 module.exports.verifyToken = async (token , secrate) => {
     try {
         return jwt.verify(token,secrate)

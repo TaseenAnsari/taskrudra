@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { boolean } = require('webidl-conversions');
 const Joi = require('joi')
 
 const User = mongoose.model('UserAuth',new mongoose.Schema({
@@ -33,7 +32,7 @@ const User = mongoose.model('UserAuth',new mongoose.Schema({
 
 
 
-const userValidate = Joi.object({
+const userSchema = Joi.object({
     username: Joi.string()
         .alphanum()
         .min(3)
@@ -55,7 +54,7 @@ const userValidate = Joi.object({
     status: Joi.boolean()
 })
 
-const loginValidate = Joi.object({
+const loginSchema = Joi.object({
     username: Joi.string()
         .alphanum()
         .min(3)
@@ -68,7 +67,7 @@ const loginValidate = Joi.object({
 })
 
 
-module.exports.userValidate = userValidate; 
+module.exports.userValidate = userSchema; 
 module.exports.User = User;
 
-module.exports.loginValidate = loginValidate;
+module.exports.loginSchema = loginSchema;

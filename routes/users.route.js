@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const {index, deleteuser , updateuser , update} = require('../controllers/users')
-const validateuser = require('../middleware/validateuser')
+const {getUser, deleteUser , updateUser , update} = require('../controllers/users')
 const auth = require('../middleware/authenticate')
 
 
 
 
-router.get('/',auth,index)
+router.get('/',auth,getUser) //fetch all user data
 
-router.get('/updateuser/:id',auth,updateuser)
+router.get('/api/updateuser/:id',auth,updateUser) //provide update form
 
-router.post('/deleteuser/:id',auth,deleteuser)
+router.post('/api/updateuser/:id',auth,update) // update user
+
+router.post('/api/deleteuser/:id',auth,deleteUser) // delete user
 
 
-router.post('/updateuser/:id',auth,update)
 
 
 

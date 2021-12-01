@@ -1,0 +1,8 @@
+{
+    "jwtSecrateKey":"secrate",
+    "db": "mydb",
+    "host":"host",
+    "port":"port",
+    "credential":"credential"
+
+}

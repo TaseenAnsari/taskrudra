@@ -2,10 +2,9 @@ const { Mongoose } = require('mongoose')
 const { User } = require('../models/users.model')
 
 
-module.exports.index = async (req, res, next) => {
+module.exports.getUser = async (req, res, next) => {
     try {
-        console.log(req.body)   
-        res.render('index',{data: await User.find({}),username:req.body.username})
+        res.render('index',{data: await User.find({}),username:req.body.payload.username})
 
     }
     catch (err) {
@@ -13,7 +12,7 @@ module.exports.index = async (req, res, next) => {
     }
 }
 
-module.exports.deleteuser = async (req, res, next) => {
+module.exports.deleteUser = async (req, res, next) => {
     try {
         const user = await User.deleteOne({_id:req.params.id})
         res.redirect('/')
@@ -24,10 +23,10 @@ module.exports.deleteuser = async (req, res, next) => {
     }
 }
 
-module.exports.updateuser = async (req, res, next) => {
+module.exports.updateUser = async (req, res, next) => {
     try {
         const user = await User.find({_id:req.params.id})
-        res.render('update',{message:"",email:user[0].email,status:user[0].status,id:user[0]._id})
+        res.render('update',{message:"",email:user[0].email,status:user[0].status,id:user[0]._id,username:req.body.payload.username})
 
     }
     catch (err) {

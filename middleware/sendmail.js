@@ -1,23 +1,38 @@
-const mailgun = require("mailgun-js");
 
+const nodemailer = require('nodemailer');
+const config = require('config')
 
 
 
 module.exports = async (req, res, next) => {
     try {
-        const DOMAIN = 'sandbox80e0ba8ffe584272b04d4e4b7f3f8150.mailgun.org';
-        const mg = mailgun({ apiKey: "92f080e3d33c041cec41e04b99580163-7b8c9ba8-fd4400d0", domain: DOMAIN });
-        const data = {
-            from: 'taseenansari@gmail.com',
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'taseenansari1@gmail.com',
+                pass: config.get('credential')
+            }
+        });
+
+        const mailOptions = {
+            from: 'taseenansari1@gmail.com',
             to: req.body.email,
-            subject: 'Hello',
-            text: `To reset Password clicl on this link ${req.body.link}`
+            subject: 'Password Reset Link',
+            text: `password Reset link->>>${req.body.link}`
         };
-        mg.messages().send(data, function (error, body) {
-            res.send("reset link has been sent to your email")
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+                res.send("something went wrong")
+            } else {
+                console.log('Email sent: ' + info.response);
+                res.send("<h2>Email has been sent</h2><br><strong>check your mail Box or Spam</strong>")
+            }
         });
     }
     catch (err) {
-        res.render('login', { user: '', message: "Invalid ID" })
+        res.send("Something Went Wrong!")
     }
 }

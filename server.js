@@ -1,14 +1,20 @@
+const ejs = require('ejs')
+const path = require('path');
+const config = require('config')
 const express = require('express');
-const app = express();
+const cookieParser = require('cookie-parser');
 const users = require('./routes/users.route')
 const userAuth = require('./routes/userAuth.route');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-const ejs = require('ejs')
-require('./models/connection.db')();
+
+//Database Connection
+require('./models/connection.db')(); 
+
+//constants
+const app = express();
+const port = config.get('port') || 5500
 
 
-
+//middleware settings
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.set('view engine', 'ejs')
@@ -19,10 +25,6 @@ app.use('/', users);
 app.use('/', userAuth)
 
 
-function sendmail() {
-    
-    
-}
 
-
-app.listen(5500, () => console.log("connect to port 5500"))
+//start server
+module.exports = app.listen(port, () => console.log("connect to port",port))
