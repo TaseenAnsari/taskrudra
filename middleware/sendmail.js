@@ -57,11 +57,11 @@ module.exports = async (req, res, next) => {
                 res.send("<h2>Email has been sent</h2><br><strong>check your mail Box or Spam</strong>")
             })
             .catch((error) => {
-                res.send(error.message)
+                res.send("Something went wrong")
             })
 
     }
     catch (err) {
-        res.send(err.message)
+        res.send("Something went wrong")
     }
 }
