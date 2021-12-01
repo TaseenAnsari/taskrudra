@@ -7,8 +7,8 @@
 
 ### Steps to deploy the application on server
 
-> $npm i <br />
 > set env variable ,host,credentianl(sendgrid apikey),mydb(mongodb connection),secrate(jwtSectratekey),port(additional) <br />
+> $npm i <br />
 > $node server.js
 
 ### Check Project 
