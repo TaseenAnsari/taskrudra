@@ -66,8 +66,16 @@ const loginSchema = Joi.object({
     .required(),
 })
 
+const resetSchema = Joi.object({
+    password: Joi.string()
+    .min(8)
+    .required(),
+    password2: Joi.string()
+    .min(8)
+    .required(),
+})
 
 module.exports.userValidate = userSchema; 
 module.exports.User = User;
-
+module.exports.resetSchema = resetSchema;
 module.exports.loginSchema = loginSchema;

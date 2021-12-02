@@ -1,6 +1,5 @@
-const ls = require('localStorage')
 const { User } = require('../models/users.model')
-const { encryption, validatePassword, genrateToken, verifyToken } = require('../auth/auth')
+const { encryption, genrateToken, verifyToken } = require('../auth/auth')
 const config = require('config')
 const mongoose = require('mongoose')
 
@@ -16,6 +15,8 @@ module.exports.logout = async (req, res, next) => { //logout functionality
         res.status(400).send(err.message)
     }
 }
+
+
 
 module.exports.userForgotPass = async (req, res, next) => {
     try {
@@ -35,10 +36,10 @@ module.exports.userForgotPass = async (req, res, next) => {
 module.exports.userResetPass = async (req, res, next) => {
     try {
         const user = await User.find({ _id: mongoose.Types.ObjectId(req.params.id) })
-        if (!user[0].username) return res.send('invalid link')
+        if (!user[0].username) return res.send("<h2>Invalid Link</h2>")
         const payload = await verifyToken(req.params.token, config.get("jwtSecrateKey") + user[0].password)
-        if(!payload.username) return res.send("invalid link")
-        if (payload == "jwt expired") return res.send("invalid link")
+        if(!payload.username) return res.send("<h2>Invalid Link</h2>")
+        if (payload == "jwt expired") return res.send("<h2>Invalid Link</h2>")
         res.cookie("id", user[0].id)
         res.cookie("linktoken", req.params.token)
         res.render('reset', { message: "" })
@@ -47,6 +48,8 @@ module.exports.userResetPass = async (req, res, next) => {
         res.send(err.message)
     }
 }
+
+
 module.exports.loginUser = async (req, res, next) => {
     try {
         if(!req.cookies.token) return res.render('login', { user: "", message: "",type:"" })
@@ -93,7 +96,14 @@ module.exports.register = async (req, res, next) => {
 
     }
     catch (err) {
-        res.render('register', { message: err.message })
+        if(err.message===`E11000 duplicate key error collection: usersauth.userauths index: username_1 dup key: { : "${req.body.username}" }`){
+
+            return res.render('register', { message: "Username already exist" });
+        }
+        else if(err.message===`E11000 duplicate key error collection: usersauth.userauths index: email_1 dup key: { : "${req.body.email}" }`){
+
+            return res.render('register', { message: "Email already exist" });
+        }
     }
 }
 
@@ -114,13 +124,6 @@ module.exports.resetPass = async (req, res, next) => {
     try {
         
         const id = req.cookies.id
-        const token = req.cookies.linktoken
-        const user = await User.find({_id:mongoose.Types.ObjectId(id)})
-        console.log()
-        if (req.body.password !== req.body.password2) return res.send('password Miss matched')
-        req.body.password = await encryption(req.body.password)
-        const payload = await verifyToken(token, config.get("jwtSecrateKey") + user[0].password)
-        if(payload=="jwt expired") return res.send("Link Expired")
         result = await User.updateOne({ _id: mongoose.Types.ObjectId(id) }, {
             $set: {
                 password: req.body.password

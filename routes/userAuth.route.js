@@ -4,7 +4,7 @@ const {loginUser ,registerUser,login , register , logout , userForgotPass ,forgo
 const validateuser = require('../middleware/validateuser')
 const validateLogin = require('../middleware/validatelogin')
 const sendmail = require('../middleware/sendmail')
-const auth = require('../middleware/authenticate')
+const validatereset = require('../middleware/validatereset');
 
 
 
@@ -18,7 +18,7 @@ router.post('/logout',logout)
 router.post('/forgot-password',forgotPass,sendmail)
 router.post('/login',validateLogin,login)
 router.post('/register',validateuser,register)
-router.post('/reset-password',resetPass)
+router.post('/reset-password',validatereset,resetPass)
 
 
 

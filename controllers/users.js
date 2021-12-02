@@ -46,6 +46,7 @@ module.exports.update = async (req, res, next) => {
 
     }
     catch (err) {
-        res.status(400).send(err.message)
+        const users = await User.find({_id:req.params.id})
+        return res.render('update',{message:"Email Already Used",email:users[0].email,status:users[0].status,id:users[0]._id,username:req.body.payload.username})
     }
 }
