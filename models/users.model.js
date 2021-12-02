@@ -22,10 +22,6 @@ const User = mongoose.model('UserAuth',new mongoose.Schema({
     status:{
         type:Boolean,
         default:true
-    },
-    access_token:{
-        type:String,
-        default:"null"
     }
 }))
 
@@ -42,11 +38,6 @@ const userSchema = Joi.object({
     password: Joi.string()
     .min(8)
     .required(),
-
-    access_token: [
-        Joi.string(),
-        Joi.number(),
-    ],
 
     email: Joi.string()
         .email()

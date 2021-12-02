@@ -96,13 +96,19 @@ module.exports.register = async (req, res, next) => {
 
     }
     catch (err) {
-        if(err.message===`E11000 duplicate key error collection: usersauth.userauths index: username_1 dup key: { : "${req.body.username}" }`){
+        if(err.message.indexOf('username_1 dup key')>-1){
 
             return res.render('register', { message: "Username already exist" });
         }
-        else if(err.message===`E11000 duplicate key error collection: usersauth.userauths index: email_1 dup key: { : "${req.body.email}" }`){
+        else if(err.message.indexOf('email_1 dup key')>-1){
 
             return res.render('register', { message: "Email already exist" });
+        }
+        else if(err.message.indexOf('UserAuth validation failed')>-1){
+            return res.render('register', { message: "username must be at least 4 charecter" });
+        }
+        else{
+            return res.render('register', { message: "something went wrong!" });
         }
     }
 }
