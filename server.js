@@ -16,7 +16,9 @@ const port = config.get('port') || 5500
 
 
 //middleware settings
-app.use(helmet())
+app.use(helmet({
+    contentSecurityPolicy: false,
+  }))
 app.use(compression())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

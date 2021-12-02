@@ -4,7 +4,11 @@ const { User } = require('../models/users.model')
 
 module.exports.getUser = async (req, res, next) => {
     try {
-        res.render('index',{data: await User.find({}),username:req.body.payload.username})
+        let user = await User.find(req.params)
+        if(!user[0]){
+            user.push({username:"no-data",email:"no-data",status:false})
+        }
+        res.render('index',{data:user,username:req.body.payload.username})
 
     }
     catch (err) {

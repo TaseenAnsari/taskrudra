@@ -7,6 +7,7 @@ const auth = require('../middleware/authenticate')
 
 
 router.get('/',auth,getUser) //fetch all user data
+router.get('/api/:username',auth,getUser) //fetch all user data
 
 router.get('/api/updateuser/:id',auth,updateUser) //provide update form
 

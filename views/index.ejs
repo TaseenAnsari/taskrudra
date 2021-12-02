@@ -16,8 +16,7 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-        crossorigin="anonymous">
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
@@ -47,60 +46,79 @@
 
     </header>
     <section>
-        <div class="container-fluid" id="table">
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">UserName</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for(var i=0; i < data.length; i++) { %>
+        <div class="container">
+            <div class="container-fluid table-resposive m-2" id="table">
+                <table class="table">
+                    <thead class="thead-dark">
                         <tr>
-                            <th scope="row">
-                                <%- i+1 %>
-                            </th>
-                            <td>
-                                <%- data[i].username %>
-                            </td>
-                            <td>
-                                <%- data[i].email %>
-                            </td>
-                            <td>
-                                <% if(!username===data[i].status){ %>
-                                    De-Active
-                                    <%} else{ %>
-                                        Active
-                                        <% } %>
-                            </td>
-                            <% if(username===data[i].username){ %>
-                                <td class="row">
-                                    <form class="col" method="" action="">
-                                        <input type="submit" class="btn btn-sm btn-secondary" value="Delete" disabled>
-                                    </form>
-                                    <form method="get" action="/api/updateuser/<%- data[i]._id %>" class="col">
-                                        <input type="submit" class="btn btn-sm btn-info" value="Update">
-                                    </form>
-                                </td>
-                                <%} else{ %>
-                                    <td class="row">
-                                        <form method="post" action="/api/deleteuser/<%- data[i]._id %>" class="col">
-                                            <input type="submit" class="btn btn-sm btn-danger" value="Delete">
-                                        </form>
-                                        <form method="get" action="/api/updateuser/<%- data[i]._id %>" class="col">
-                                            <input type="submit" class="btn btn-sm btn-info" value="Update">
-                                        </form>
-                                    </td>
-                                    <% } %>
+                            <th scope="col">#</th>
+                            <th scope="col">UserName</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
                         </tr>
-                        <% } %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% if(data[0].username==="no-data" ){ %>
+
+                            <tr>
+                                <th>
+                                    0
+                                </th>
+                                <td>
+                                    No data
+                                </td>
+                            </tr>
+                            <% } else { %>
+                                <% for(var i=0; i < data.length; i++) { %>
+                                    <tr>
+                                        <th scope="row">
+                                            <%- i+1 %>
+                                        </th>
+                                        <td>
+                                            <%- data[i].username %>
+                                        </td>
+                                        <td>
+                                            <%- data[i].email %>
+                                        </td>
+                                        <td>
+                                            <% if(!username===data[i].status){ %>
+                                                De-Active
+                                                <%} else{ %>
+                                                    Active
+                                                    <% } %>
+                                        </td>
+                                        <% if(username===data[i].username){ %>
+                                            <td class="row">
+                                                <form class="col" method="" action="">
+                                                    <input type="submit" class="btn btn-sm btn-secondary" value="Delete"
+                                                        disabled>
+                                                </form>
+                                                <form method="get" action="/api/updateuser/<%- data[i]._id %>"
+                                                    class="col">
+                                                    <input type="submit" class="btn btn-sm btn-info" value="Update">
+                                                </form>
+                                            </td>
+                                            <%} else{ %>
+                                                <td class="row">
+                                                    <form method="post" action="/api/deleteuser/<%- data[i]._id %>"
+                                                        class="col">
+                                                        <input type="submit" class="btn btn-sm btn-danger"
+                                                            value="Delete">
+                                                    </form>
+                                                    <form method="get" action="/api/updateuser/<%- data[i]._id %>"
+                                                        class="col">
+                                                        <input type="submit" class="btn btn-sm btn-info" value="Update">
+                                                    </form>
+                                                </td>
+                                                <% } %>
+                                    </tr>
+                                    <% } }%>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </section>
 </body>
 
