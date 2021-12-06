@@ -30,7 +30,7 @@ module.exports.deleteUser = async (req, res, next) => {
 module.exports.updateUser = async (req, res, next) => {
     try {
         const user = await User.find({_id:req.params.id})
-        res.render('update',{message:"",email:user[0].email,status:user[0].status,id:user[0]._id,username:req.body.payload.username})
+        res.render('update',{message:"",email:user[0].email,status:user[0].status,id:user[0]._id,username:req.body.payload.username,usernameu:user[0].username})
 
     }
     catch (err) {
@@ -43,6 +43,7 @@ module.exports.update = async (req, res, next) => {
         if(!req.body.status) statusone = false
         else statusone = true
         const user = await User.updateOne({_id:req.params.id},{$set:{
+            username:req.body.username,
             email:req.body.email,
             status:statusone
         }})
@@ -51,6 +52,6 @@ module.exports.update = async (req, res, next) => {
     }
     catch (err) {
         const users = await User.find({_id:req.params.id})
-        return res.render('update',{message:"Email Already Used",email:users[0].email,status:users[0].status,id:users[0]._id,username:req.body.payload.username})
+        return res.render('update',{message:"User Already Used",email:users[0].email,status:users[0].status,id:users[0]._id,username:req.body.payload.username,usernameu:users[0].username})
     }
 }

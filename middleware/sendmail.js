@@ -53,11 +53,10 @@ module.exports = async (req, res, next) => {
         sgMail
             .send(msg)
             .then((response) => {
-                console.log(response[0].statusCode)
-                res.send("<h2>Email has been sent</h2><br><strong>check your mail Box or Spam</strong>")
+                return res.render('forgot', { message: "Email Successfully Send",type:"success" })
             })
             .catch((error) => {
-                res.send("Something went wrong")
+                return res.render('forgot', { message: "Something Went Wrong" ,type:"danger"})
             })
 
     }
