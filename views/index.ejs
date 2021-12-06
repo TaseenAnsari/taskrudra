@@ -71,24 +71,24 @@
                                         </p>
                                         <% if(username===data[i].username){ %>
                                             <div class="row">
-                                                <form class="col-2" method="" action="">
+                                                <form class="col-3" method="" action="">
                                                     <input type="submit" class="btn btn-sm btn-secondary" value="Delete"
                                                         disabled>
                                                 </form>
                                                 <form method="get" action="/api/updateuser/<%- data[i]._id %>"
-                                                    class="col-10">
+                                                    class="col-9">
                                                     <input type="submit" class="btn btn-sm btn-info" value="Update">
                                                 </form>
                                             </div>
                                             <%} else{ %>
                                                 <div class="row">
                                                     <form method="post" action="/api/deleteuser/<%- data[i]._id %>"
-                                                        class="col-2">
+                                                        class="col-3">
                                                         <input type="submit" class="btn btn-sm btn-danger"
                                                             value="Delete">
                                                     </form>
                                                     <form method="get" action="/api/updateuser/<%- data[i]._id %>"
-                                                        class="col-10">
+                                                        class="col-9">
                                                         <input type="submit" class="btn btn-sm btn-info" value="Update">
                                                     </form>
                                                 </div>
