@@ -17,8 +17,49 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <style>
-        </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script>
+       const getUsers = async () => {
+            let user= '<li class="list-group-item active">Users</li>'
+            let data = await axios.get(`${'<%- host %>'}/api/users`)
+            data = data.data;
+            for(let i=0; i < data.length ;i++){
+                console.log(data[i]._id)
+                if(!data[i].status){
+                    user += `
+                        <li class="list-group-item">
+                            <h3>${data[i].username}</h3>
+                            <p>${data[i].email}</p>
+                            <p>
+                                <span class="text-danger"> De-Active</span>
+                            </p>
+                            <div class="row">
+                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser('${data[i]._id}')">Delete</button>
+                                <a class="btn btn-sm btn-info" href="/updateuser/${data[i]._id}">Update</a>
+                            </div>
+                        </li>`
+                }
+                else{
+                    user += `
+                        <li class="list-group-item">
+                            <h3>${data[i].username}</h3>
+                            <p>${data[i].email}</p>
+                            <p>
+                                <span class="text-success"> Active</span>
+                            </p>
+                            <div class="row">
+                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser('${data[i]._id}')">Delete</button>
+                                <a class="btn btn-sm btn-info" href="/updateuser/${data[i]._id}">Update</a>
+                            </div>
+                        </li>`
+                }
+
+            }
+            document.getElementById('user').innerHTML = user
+        }
+       getUsers();
+   </script>
+
 </head>
 
 <body>
@@ -48,59 +89,37 @@
 
     </header>
     <section class="">
-        <div class=" p-2 col-8" id="user">
-        <ul class="list-group">
-            <li class="list-group-item active">Users</li>
-            <% if(data[0].username==="no-data" ){ %>
-                <p>No Data</p>
-                <% } else { %>
-                    <% for(var i=0; i < data.length; i++) { %>
-                        <li class="list-group-item">
-                            <h5>#<%- i+1 %>
-                                    <%- data[i].username %>
-                                        </h3>
-                                        <p>
-                                            <%- data[i].email %>
-                                        </p>
-                                        <p>
-                                            <% if(!username===data[i].status){ %>
-                                                <span class="text-danger"> De-Active</span>
-                                                <%} else{ %>
-                                                    <span class="text-success"> Active</span>
-                                                    <% } %>
-                                        </p>
-                                        <% if(username===data[i].username){ %>
-                                            <div class="row">
-                                                <form class="col-3" method="" action="">
-                                                    <input type="submit" class="btn btn-sm btn-secondary" value="Delete"
-                                                        disabled>
-                                                </form>
-                                                <form method="get" action="/api/updateuser/<%- data[i]._id %>"
-                                                    class="col-9">
-                                                    <input type="submit" class="btn btn-sm btn-info" value="Update">
-                                                </form>
-                                            </div>
-                                            <%} else{ %>
-                                                <div class="row">
-                                                    <form method="post" action="/api/deleteuser/<%- data[i]._id %>"
-                                                        class="col-3">
-                                                        <input type="submit" class="btn btn-sm btn-danger"
-                                                            value="Delete">
-                                                    </form>
-                                                    <form method="get" action="/api/updateuser/<%- data[i]._id %>"
-                                                        class="col-9">
-                                                        <input type="submit" class="btn btn-sm btn-info" value="Update">
-                                                    </form>
-                                                </div>
-                                                <% } %>
-                        </li>
-                        <% } }%>
-        </ul>
+        <div class=" p-2 col-8" >
+            <ul class="list-group" id="user" >
+                
+
+            </ul>
         </div>
-    </div>
-
-
+        </div>
+        
     </section>
+
+
+
+
+
+    <script>
+     const deleteUser = async(id)=>{
+         if( window.confirm('Are you sure?')===false) return
+         const res = await axios.delete(`${'<%- host %>'}/api/users/${id}`)
+         if(res.status===200){
+             if(res.data.status===200){
+                 window.alert("user deleted")
+
+             }
+             else if(res.data.status===400){
+                window.location.href = `${'<%- host %>'}`;
+             }
+         }
+         getUsers()
+     }
+     
+    </script>
 </body>
 
 </html>

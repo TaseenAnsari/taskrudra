@@ -45,6 +45,7 @@
             font-weight: bold;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -71,33 +72,67 @@
         </div>
     </nav>
     <div class="login-form">
-        <form action="/api/updateuser/<%- id %>" method="post">
-            <h2 class="text-center">Update User</h2>
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Username" name="username" required="required"
-                    value="<%- usernameu %>">
-            </div>
-            <div class="form-group">
-                <input type="email" class="form-control" placeholder="Email" name="email" required="required"
-                    value="<%- email %>">
-            </div>
-            <div class="form-group">
-                <p class="text-danger">
-                    <%- message %>
-                </p>
-            </div>
-            <% if(!status){ %>
-                <label class="pull-left checkbox-inline"><input type="checkbox" name="status"> status</label>
-                <% }else { %>
-                    <label class="pull-left checkbox-inline"><input type="checkbox" name="status" checked>
-                        status</label>
-                    <% } %>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block">Proceed</button>
-                        </div>
-        </form>
+        <h2 class="text-center">Update User</h2>
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Username" name="username"
+                value="<%- usernameu %>"  required="required">
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" placeholder="Email" name="email" required
+                value="<%- email %>"  required="required">
+        </div>
+        <div class="form-group">
+            <p class="text-danger">
+                <%- message %>
+            </p>
+        </div>
+        <% if(!status){ %>
+            <label class="pull-left checkbox-inline"><input type="checkbox" name="status"> status</label>
+            <% }else { %>
+                <label class="pull-left checkbox-inline"><input type="checkbox" name="status" checked>
+                    status</label>
+                <% } %>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary btn-block"
+                            onclick="updateUser('<%- id %>')">Proceed</button>
+                    </div>
     </div>
+    <script>
+        const updateUser = async (id) => {
+            try {
+                console.log(document.getElementsByName('status')[0].checked)
+                if (window.confirm('Are you sure?') === false) return
+                const res = await axios.put(`${'<%- host %>'}/api/users/${id}`, {
+                    username: document.getElementsByName('username')[0].value,
+                    email: document.getElementsByName('email')[0].value,
+                    status: document.getElementsByName('status')[0].checked
+                });
+                if (res.status === 200) {
+                    if (res.data.status === 400) {
+                        window.location.href = `${'<%- host %>'}`;
+                    }
+                    else if (res.data.status === 200) {
 
+                        window.alert('User updated')
+                        window.location.href = `${'<%- host %>'}`;
+                    }
+                    else if (res.data.status === 404) {
+
+                        window.alert(res.data.message)
+                        window.location.href = `${'<%- host %>'}/updateuser/${id}`;
+                    }
+                    else {
+                        window.alert('User Already Exist')
+                        window.location.href = `${'<%- host %>'}:5500/updateuser/${id}`;
+                    }
+                }
+            }
+            catch (err) {
+                window.alert('User Already Exist')
+                window.location.href = `${'<%- host %>'}/updateuser/${id}`;
+            }
+        }
+    </script>
 
 
 </body>

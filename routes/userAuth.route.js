@@ -1,24 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const {loginUser ,registerUser,login , register , logout , userForgotPass ,forgotPass , userResetPass , resetPass} = require('../controllers/userAuth')
-const validateuser = require('../middleware/validateuser')
+const {loginUser ,registerUser,login , logout , userForgotPass ,forgotPass , userResetPass  , getUser ,updateUser} = require('../controllers/userAuth')
 const validateLogin = require('../middleware/validatelogin')
 const sendmail = require('../middleware/sendmail')
 const validatereset = require('../middleware/validatereset');
+const auth = require('../middleware/authenticate')
 
 
+router.get('/',auth,getUser) //home page
+router.get('/updateuser/:id',auth,updateUser) //provide update form
+router.get('/login',loginUser) //provide login form
+router.get('/register',registerUser) //provide register form
+router.get('/forgot-password',userForgotPass) // provide forgot password form
+router.get('/reset-password/:id/:token',userResetPass) //provide reset password form
 
-router.get('/login',loginUser)
-router.get('/register',registerUser)
-router.get('/forgot-password',userForgotPass)
-router.get('/reset-password/:id/:token',userResetPass)
 
 
 router.post('/logout',logout)
 router.post('/forgot-password',forgotPass,sendmail)
 router.post('/login',validateLogin,login)
-router.post('/register',validateuser,register)
-router.post('/reset-password',validatereset,resetPass)
 
 
 

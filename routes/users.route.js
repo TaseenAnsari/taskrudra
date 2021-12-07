@@ -1,20 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const {getUser, deleteUser , updateUser , update} = require('../controllers/users')
-const auth = require('../middleware/authenticate')
+const {deleteUser , update, getUsers, resetPass ,register} = require('../controllers/users')
+const auth2 = require('../middleware/authenticateApi')
+const validateuser = require('../middleware/validateuser')
+const validatereset = require('../middleware/validatereset');
 
 
 
 
+//API
 
-router.get('/',auth,getUser) //fetch all user data
-router.get('/api/:username',auth,getUser) //fetch all user data
+router.get('/api/users',auth2,getUsers) //fetch all user data
 
-router.get('/api/updateuser/:id',auth,updateUser) //provide update form
+router.post('/api/users',validateuser,register) //create user
 
-router.post('/api/updateuser/:id',auth,update) // update user
+router.put('/api/users/:id',auth2,update) // update user
 
-router.post('/api/deleteuser/:id',auth,deleteUser) // delete user
+router.patch('/api/users/',validatereset,resetPass) // change password
+
+router.delete('/api/users/:id',auth2,deleteUser) // delete user
 
 
 

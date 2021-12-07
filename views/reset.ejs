@@ -40,6 +40,7 @@
                 font-weight: bold;
             }
         </style>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
 
 <body>
@@ -60,7 +61,7 @@
         </div>
     </nav>
     <div class="login-form">
-        <form action="/reset-password" method="post">
+        <form>
             <h2 class="text-center">Reset Password</h2>       
             <div class="form-group">
                 <input type="password" class="form-control" placeholder="Password" name="password" required="required">
@@ -72,12 +73,42 @@
                 <p class="text-danger"><%- message %></p>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block">Proceed</button>
+                <button type="button" class="btn btn-primary btn-block" onclick="resetPass()">Proceed</button>
             </div>      
         </form>
         <p class="text-center"><a href="login">Login</a></p>
     </div>
-
+    <script>
+        const resetPass = async()=>{
+            if(document.getElementsByName('password')[0].value!==document.getElementsByName('password2')[0].value){
+                return window.alert('Passsword Miss matched')
+            }
+            if((document.getElementsByName('password')[0].value).length<=7){
+                return window.alert('Passsword Must be atleast 8 Character')
+            }
+            const res = await axios.patch(`${'<%- host %>'}/api/users`,{
+                password:document.getElementsByName('password')[0].value,
+                password2:document.getElementsByName('password2')[0].value,
+            })
+            console.log(res)
+            if(res.data.status===200){
+                window.alert('password successfully Changed')
+                window.location.href = `${'<%- host %>'}`;
+            }
+            else if(res.data.status===401){
+                window.alert(res.data.message)
+                window.location.href = `${'<%- host %>'}`;
+            }
+            else if(res.data.status===400){
+                window.alert("Link Already been Used")
+                window.location.href = `${'<%- host %>'}`;
+            }
+            else{
+                window.alert(res.data.message)
+                window.location.href = `${'<%- host %>'}`;
+            }
+        }
+    </script>
 
 
 </body>

@@ -17,30 +17,35 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <style>
-            .login-form {
-                width: 340px;
-                margin: 50px auto;
-            }
-            .login-form form {
-                margin-bottom: 15px;
-                background: #f7f7f7;
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-                padding: 30px;
-            }
-            .login-form h2 {
-                margin: 0 0 15px;
-            }
-            .form-control, .btn {
-                min-height: 38px;
-                border-radius: 2px;
-            }
-            .btn {        
-                font-size: 15px;
-                font-weight: bold;
-            }
-        </style>
-    </head>
+    <style>
+        .login-form {
+            width: 340px;
+            margin: 50px auto;
+        }
+
+        .login-form form {
+            margin-bottom: 15px;
+            background: #f7f7f7;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        .login-form h2 {
+            margin: 0 0 15px;
+        }
+
+        .form-control,
+        .btn {
+            min-height: 38px;
+            border-radius: 2px;
+        }
+
+        .btn {
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -51,8 +56,8 @@
         </button>
     </nav>
     <div class="login-form">
-        <form action="/register" method="post">
-            <h2 class="text-center">Register</h2>       
+        <form>
+            <h2 class="text-center">Register</h2>
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" name="username" required="required">
             </div>
@@ -63,16 +68,41 @@
                 <input type="password" class="form-control" placeholder="Password" name="password" required="required">
             </div>
             <div class="form-group">
-                <p class="text-danger"><%- message %></p>
+                <p class="text-danger">
+                    <%- message %>
+                </p>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
-            </div>      
+                <button type="button" class="btn btn-primary btn-block" onclick="register()">Register</button>
+            </div>
         </form>
         <p class="text-center"><a href="login">Login</a></p>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const register = async () => {
+            const res = await axios.post(`${'<%- host %>'}/api/users/`, {
+                username: document.getElementsByName('username')[0].value,
+                password: document.getElementsByName('password')[0].value,
+                email: document.getElementsByName('email')[0].value
+            });
+        console.log(res)
+        if (res.data.status === 200) {
 
+            window.alert('Successfully Register')
+            window.location.href = `${'<%- host %>'}/login`;
+        }
+        else if (res.data.status === 404) {
 
+            window.alert(res.data.message)
+            window.location.href = `${'<%- host %>'}/register`;
+        }
+        else {
+            window.alert('User Already Exist')
+            window.location.href = `${'<%- host %>'}/register`;
+        }
+    }
+    </script>
 
 </body>
 

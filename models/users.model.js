@@ -45,6 +45,20 @@ const userSchema = Joi.object({
     status: Joi.boolean()
 })
 
+
+const updateUserSchema = Joi.object({
+    username: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+
+    email: Joi.string()
+        .email()
+        .required(),
+    status: Joi.boolean()
+})
+
 const loginSchema = Joi.object({
     username: Joi.string()
         .alphanum()
@@ -67,6 +81,7 @@ const resetSchema = Joi.object({
 })
 
 module.exports.userValidate = userSchema; 
+module.exports.updateUserValidate = updateUserSchema; 
 module.exports.User = User;
 module.exports.resetSchema = resetSchema;
 module.exports.loginSchema = loginSchema;

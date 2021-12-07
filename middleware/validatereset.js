@@ -12,16 +12,16 @@ module.exports = async (req, res, next) => {
         const token = req.cookies.linktoken
         const user = await User.find({ _id: mongoose.Types.ObjectId(id) })
 
-        if (req.body.password !== req.body.password2) return res.send('<h2>Password Miss Matched</h2>')
+        if (req.body.password !== req.body.password2) return res.send({status:401,message:"password miss matched"})
         req.body.password = await encryption(req.body.password)
         const payload = await verifyToken(token, config.get("jwtSecrateKey") + user[0].password)
-        if (payload == "jwt expired") return res.send("<h2>Link Expired</h2>");
+        if (payload == "jwt expired") return res.send({status:400,message:"Link Expired"})
         next()
     }
     catch (err) {
         if (err.message == 'Argument passed in must be a string of 12 bytes or a string of 24 hex characters') {
-            return res.status(401).send(`<h2>Link Already Used</h2>`);
+            return res.send({status:400,message:err.message})
         }
-        return res.status(401).send(`<h2>${err.message}</h2>`);
+        return res.send({status:401,message:err.message})
     }
 }

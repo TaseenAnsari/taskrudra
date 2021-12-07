@@ -5,6 +5,41 @@ const mongoose = require('mongoose')
 
 
 
+
+
+
+module.exports.getUser = async (req, res, next) => {
+    try {
+        let user = await User.find(req.params)
+        if(!user[0]){
+            user.push({username:"no-data",email:"no-data",status:false})
+        }
+        res.render('index',{data:user,username:req.body.payload.username,host:config.get('host')})
+
+    }
+    catch (err) {
+        res.status(400).send(err.message)
+    }
+}
+
+module.exports.updateUser = async (req, res, next) => {
+    try {
+        const user = await User.find({_id:req.params.id})
+        res.render('update',{
+            message:"",email:user[0].email,
+            status:user[0].status,id:user[0]._id,
+            username:req.body.payload.username,
+            usernameu:user[0].username,
+            host:config.get('host')})
+
+    }
+    catch (err) {
+        res.status(400).send(err.message)
+    }
+}
+
+
+
 module.exports.logout = async (req, res, next) => { //logout functionality
     try {
         res.cookie("token", "")
@@ -20,14 +55,14 @@ module.exports.logout = async (req, res, next) => { //logout functionality
 
 module.exports.userForgotPass = async (req, res, next) => {
     try {
-        if(!req.cookies.token) return res.render('forgot', { message: "" , type:'' })
-        if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('forgot', { message: "" ,type:""})
+        if(!req.cookies.token) return res.render('forgot', { message: "" , type:'' ,host:config.get('host')})
+        if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('forgot', { message: "" ,type:"",host:config.get('host')})
         res.redirect('/')
         
 
     }
     catch (err) {
-        res.render('forgot', { message: err.message })
+        res.render('forgot', { message: err.message ,host:config.get('host')})
     }
 }
 
@@ -42,7 +77,7 @@ module.exports.userResetPass = async (req, res, next) => {
         if (payload == "jwt expired") return res.send("<h2>Link Expired</h2>")
         res.cookie("id", user[0].id)
         res.cookie("linktoken", req.params.token)
-        res.render('reset', { message: "" })
+        res.render('reset', { message: "" ,host:config.get('host')})
     }
     catch (err) {
         res.send("<h2>Invalid Link</h2>")
@@ -52,8 +87,8 @@ module.exports.userResetPass = async (req, res, next) => {
 
 module.exports.loginUser = async (req, res, next) => {
     try {
-        if(!req.cookies.token) return res.render('login', { user: "", message: "",type:"" })
-        if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('login', { user: "", message: "session expired" ,type:"danger"})
+        if(!req.cookies.token) return res.render('login', { user: "", message: "",type:"" ,host:config.get('host')})
+        if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('login', { user: "", message: "session expired" ,type:"danger",host:config.get('host')})
         res.redirect('/')
     }
     catch (err) {
@@ -64,8 +99,8 @@ module.exports.loginUser = async (req, res, next) => {
 
 module.exports.registerUser = async (req, res, next) => {
     try {
-        if(!req.cookies.token) return res.render('register', { message: "" })
-        if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('register', { message: "" })
+        if(!req.cookies.token) return res.render('register', { message: "" ,host:config.get('host')})
+        if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('register', { message: "" ,host:config.get('host')})
         res.redirect('/')
         
 
@@ -81,65 +116,22 @@ module.exports.login = async (req, res, next) => {
         res.redirect('/')
     }
     catch (err) {
-        res.render('login', { user: '', message: err.message,type:"danger" })
+        res.render('login', { user: '', message: err.message,type:"danger",host:config.get('host') })
     }
 }
 
 
-module.exports.register = async (req, res, next) => {
-    try {
-        req.body.password = await encryption(req.body.password)
-        const user = new User(req.body);
-        result = await user.save();
-
-        res.render('login', { user: result, message: "User Successfuly Registered" ,type:"success"})
-
-    }
-    catch (err) {
-        if(err.message.indexOf('username_1 dup key')>-1){
-
-            return res.render('register', { message: "Username already exist" });
-        }
-        else if(err.message.indexOf('email_1 dup key')>-1){
-
-            return res.render('register', { message: "Email already exist" });
-        }
-        else if(err.message.indexOf('UserAuth validation failed')>-1){
-            return res.render('register', { message: "username must be at least 4 charecter" });
-        }
-        else{
-            return res.render('register', { message: "something went wrong!" });
-        }
-    }
-}
 
 module.exports.forgotPass = async (req, res, next) => {
     try {
         const user = await User.find({ email: req.body.email });
-        if (!user[0]) return res.render('forgot', { message: "Email doesn't exist",type:"danger" })
+        if (!user[0]) return res.render('forgot', { message: "Email doesn't exist",type:"danger" ,host:config.get('host')})
         const link = `${config.get('host')}/reset-password/${user[0]._id}/${await genrateToken({ username: user[0].username }, config.get('jwtSecrateKey') + user[0].password)}`
         req.body.link = link
         next()
     }
     catch (err) {
-        res.render('forgot', { message: err.message , type:"danger" })
+        res.render('forgot', { message: err.message , type:"danger",host:config.get('host') })
     }
 }
 
-module.exports.resetPass = async (req, res, next) => {
-    try {
-        
-        const id = req.cookies.id
-        result = await User.updateOne({ _id: mongoose.Types.ObjectId(id) }, {
-            $set: {
-                password: req.body.password
-            }
-        })
-        res.cookie("id","")
-        res.cookie("linktoken","")
-        res.render('login',{user:"",message:"password changed",type:"success"})
-    }
-    catch (err) {
-        res.status(400).send('link has been Already used')
-    }
-}
