@@ -7,6 +7,9 @@ const users = require('./routes/users.route')
 const userAuth = require('./routes/userAuth.route');
 const helmet = require('helmet');
 const compression = require('compression')
+const upload = require('express-fileupload');
+const zip = require('express-zip');
+
 //Database Connection
 require('./models/connection.db')(); 
 
@@ -19,6 +22,7 @@ const port = config.get('port') || 5500
 app.use(helmet({
     contentSecurityPolicy: false,
   }))
+app.use(upload())
 app.use(compression())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -30,6 +34,5 @@ app.use('/', users);
 app.use('/', userAuth)
 
 
-
 //start server
-module.exports = app.listen(process.env.PORT|| port, () => console.log("connect to port",port))
+module.exports.server = app.listen(process.env.PORT|| port, () => console.log("connect to port",port))

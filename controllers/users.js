@@ -2,9 +2,8 @@ const { Mongoose } = require('mongoose')
 const { User ,updateUserValidate} = require('../models/users.model')
 const {encryption} = require('../auth/auth')
 const mongoose = require('mongoose')
-
-
-
+const path = require('path')
+const fs = require('fs')
 module.exports.getUsers = async (req, res, next) => { //Get All users
     try {
         let user = await User.find({})
@@ -36,15 +35,16 @@ module.exports.update = async (req, res, next) => { //update user
         await updateUserValidate.validateAsync({
             username:req.body.username,
             email:req.body.email,
-            status:statusone
+            status:statusone,
+            resume:req.body.resume
         });
         const user = await User.updateOne({_id:req.params.id},{$set:{
             username:req.body.username,
             email:req.body.email,
-            status:statusone
+            status:statusone,
+            resume:req.body.resume 
         }})
         res.send({status:200,message:"succesfully updated"})
-
     }
     catch (err) {
         if(err.message==='"username" length must be at least 3 characters long') return res.send({status:400,message:err.message})
@@ -87,3 +87,15 @@ module.exports.register = async (req, res, next) => { //create user
        res.status(200).send({status:403})
     }
 }
+
+module.exports.resume = async (req, res, next) => { //create user
+    try {
+        res.download(path.join((require('../filename').dir)(),"resume",req.params.resume),function(err){
+        })
+
+    }
+    catch (err) {
+       res.status(200).send({status:403})
+    }
+}
+

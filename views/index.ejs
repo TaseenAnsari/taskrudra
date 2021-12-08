@@ -43,9 +43,13 @@
                         <li class="list-group-item">
                             <h3>#${i+1} ${data[i].username}</h3>
                             <p>${data[i].email}</p>
+                            <p>Resume <a href="/api/users/resume/${data[i].resume}">${data[i].resume}</a>
                             <p>
                                 <span class="text-success"> Active</span>
                             </p>
+                            <div>
+
+                            </div>
                             <div class="row">
                                 <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser('${data[i]._id}')">Delete</button>
                                 <a class="btn btn-sm btn-info ml-1" href="/updateuser/${data[i]._id}">Update</a>

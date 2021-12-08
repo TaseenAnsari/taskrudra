@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {deleteUser , update, getUsers, resetPass ,register} = require('../controllers/users')
+const {deleteUser , update, getUsers, resetPass ,register,resume} = require('../controllers/users')
 const auth2 = require('../middleware/authenticateApi')
 const validateuser = require('../middleware/validateuser')
 const validatereset = require('../middleware/validatereset');
 
-
+router.get('/api/users/resume/:resume',resume) //fetch all user data
 
 
 //API

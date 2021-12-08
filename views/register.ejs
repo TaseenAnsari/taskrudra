@@ -56,7 +56,6 @@
         </button>
     </nav>
     <div class="login-form">
-        <form>
             <h2 class="text-center">Register</h2>
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" name="username" required="required">
@@ -67,6 +66,11 @@
             <div class="form-group">
                 <input type="password" class="form-control" placeholder="Password" name="password" required="required">
             </div>
+            <div class="mb-3" id="upload">
+                <label for="formFile" class="form-label">Upload Resume</label>
+                <input class="form-control" type="file" name="resume" accept=".txt,.pdf">
+                <button class="btn btn-sm btn-info" onclick="upload()">upload</button>
+            </div>
             <div class="form-group">
                 <p class="text-danger">
                     <%- message %>
@@ -75,18 +79,18 @@
             <div class="form-group">
                 <button type="button" class="btn btn-primary btn-block" onclick="register()">Register</button>
             </div>
-        </form>
         <p class="text-center"><a href="login">Login</a></p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         const register = async () => {
+            if(!document.getElementsByName('resume') || !document.getElementsByName('filename')[0]) return window.alert('Upload File first')
             const res = await axios.post(`${'<%- host %>'}/api/users/`, {
                 username: document.getElementsByName('username')[0].value,
                 password: document.getElementsByName('password')[0].value,
-                email: document.getElementsByName('email')[0].value
+                email: document.getElementsByName('email')[0].value,
+                resume: document.getElementsByName('filename')[0].innerHTML
             });
-        console.log(res)
         if (res.data.status === 200) {
 
             window.alert('Successfully Register')
@@ -95,13 +99,36 @@
         else if (res.data.status === 404) {
 
             window.alert(res.data.message)
-            window.location.href = `${'<%- host %>'}/register`;
+            // window.location.href = `${'<%- host %>'}/register`;
         }
         else {
             window.alert('User Already Exist')
-            window.location.href = `${'<%- host %>'}/register`;
+            // window.location.href = `${'<%- host %>'}/register`;
         }
     }
+    const upload = async () => {
+            const formData = new FormData();
+            const name = Math.random() * (999999- 99999) + 99999
+            const file = document.getElementsByName('resume')[0].files[0]
+            formData.append("files", file)
+            const res = await axios.post(`${'<%- host %>'}/upload/${name}`, formData)
+            if (res.data.status === 200) {
+                document.getElementById('upload').innerHTML = `
+                <label for="formFile" class="form-label" name="filename">${name}_${file.name}</label>
+                <button class="btn btn-sm btn-danger" onclick="remove()">Remove</button>
+                `
+            }
+            else if(res.data.status === 401){
+                window.location.href = `${'<%- host %>'}`;
+            }
+        }
+        const remove = async () => {
+            document.getElementById('upload').innerHTML = `
+                <label for="formFile" class="form-label">Upload Resume</label>
+                <input class="form-control" type="file" name="resume" accept=".txt,.pdf">
+                <button class="btn btn-sm btn-info" onclick="upload()">upload</button>
+            `
+        }
     </script>
 
 </body>

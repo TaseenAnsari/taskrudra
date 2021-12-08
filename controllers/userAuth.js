@@ -30,7 +30,9 @@ module.exports.updateUser = async (req, res, next) => { //render update page
             status:user[0].status,id:user[0]._id,
             username:req.body.payload.username,
             usernameu:user[0].username,
-            host:config.get('host')})
+            resume: user[0].resume, 
+            host:config.get('host')
+        })
 
     }
     catch (err) {
@@ -135,3 +137,16 @@ module.exports.forgotPass = async (req, res, next) => { //forgot password functi
     }
 }
 
+module.exports.upload = async(req,res,next)=>{
+    const resume = req.files
+        if(resume){
+            uploadPath = (require('../filename').dir)() + '/resume/'+ req.params.id+'_'+resume.files.name;
+            resume.files.mv(uploadPath, function(err) {
+                if (err)
+                 return res.send({status:401,message:"file not uploaded"})
+                else{
+                    return res.send({status:200,message:"file uploaded"})
+                }
+              });
+        }
+}

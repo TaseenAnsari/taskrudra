@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {loginUser ,registerUser,login , logout , userForgotPass ,forgotPass , userResetPass  , index ,updateUser} = require('../controllers/userAuth')
+const {loginUser ,registerUser,login , logout , userForgotPass ,forgotPass , userResetPass  , index ,updateUser , upload} = require('../controllers/userAuth')
 const validateLogin = require('../middleware/validatelogin')
 const sendmail = require('../middleware/sendmail')
 const auth = require('../middleware/authenticate')
@@ -14,7 +14,7 @@ router.get('/forgot-password',userForgotPass) // provide forgot password form
 router.get('/reset-password/:id/:token',userResetPass) //provide reset password form
 
 
-
+router.post('/upload/:id',upload) // update user
 router.post('/logout',logout) //un-authorized from all api functionality 
 router.post('/forgot-password',forgotPass,sendmail) //send unique password url link to user mail
 router.post('/login',validateLogin,login) //authorized from all api functionality 

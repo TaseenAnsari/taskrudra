@@ -10,6 +10,7 @@ module.exports = async(req , res ,next)=>{
     next()
     }
     catch(err){
+        res.send(err.message)
         res.send({status:401,message:"Access Denied"})
     }
 }

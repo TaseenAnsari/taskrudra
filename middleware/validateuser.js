@@ -7,6 +7,7 @@ module.exports = async(req ,res ,next)=>{
         next()
     }
     catch(err){
+        console.log(err.message)
         if(err.message==='"username" length must be at least 3 characters long') return res.send({status:404,message:err.message})
         if(err.message==='"username" is not allowed to be empty') return res.send({status:404,message:err.message})
         if(err.message==='"email" is not allowed to be empty') return res.send({status:404,message:err.message})

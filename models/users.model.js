@@ -19,6 +19,9 @@ const User = mongoose.model('UserAuth',new mongoose.Schema({
         required:true,
         minlength:8
     },
+    resume:{
+        type:String
+    },
     status:{
         type:Boolean,
         default:true
@@ -42,7 +45,8 @@ const userSchema = Joi.object({
     email: Joi.string()
         .email()
         .required(),
-    status: Joi.boolean()
+    status: Joi.boolean(),
+    resume: Joi.string(),
 })
 
 
@@ -56,7 +60,8 @@ const updateUserSchema = Joi.object({
     email: Joi.string()
         .email()
         .required(),
-    status: Joi.boolean()
+    status: Joi.boolean(),
+    resume: Joi.string()
 })
 
 const loginSchema = Joi.object({
