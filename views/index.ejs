@@ -29,6 +29,7 @@
                         <li class="list-group-item">
                             <h3>${data[i].username}</h3>
                             <p>${data[i].email}</p>
+                            <p>Resume <a href="/api/users/resume/${data[i].resume}">${data[i].resume}</a></p>
                             <p>
                                 <span class="text-danger"> De-Active</span>
                             </p>
@@ -43,7 +44,7 @@
                         <li class="list-group-item">
                             <h3>#${i+1} ${data[i].username}</h3>
                             <p>${data[i].email}</p>
-                            <p>Resume <a href="/api/users/resume/${data[i].resume}">${data[i].resume}</a>
+                            <p>Resume <a href="/api/users/resume/${data[i].resume}">${data[i].resume}</a></p>
                             <p>
                                 <span class="text-success"> Active</span>
                             </p>
