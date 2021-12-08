@@ -72,6 +72,7 @@
         </div>
     </nav>
     <div class="login-form">
+        <form>
         <h2 class="text-center">Update User</h2>
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Username" name="username"
@@ -96,11 +97,11 @@
                         <button type="button" class="btn btn-primary btn-block"
                             onclick="updateUser('<%- id %>')">Proceed</button>
                     </div>
+                </form>
     </div>
     <script>
         const updateUser = async (id) => {
             try {
-                console.log(document.getElementsByName('status')[0].checked)
                 if (window.confirm('Are you sure?') === false) return
                 const res = await axios.put(`${'<%- host %>'}/api/users/${id}`, {
                     username: document.getElementsByName('username')[0].value,
@@ -108,7 +109,8 @@
                     status: document.getElementsByName('status')[0].checked
                 });
                 if (res.status === 200) {
-                    if (res.data.status === 400) {
+                    if (res.data.status === 401) {
+                        
                         window.location.href = `${'<%- host %>'}`;
                     }
                     else if (res.data.status === 200) {
@@ -116,14 +118,14 @@
                         window.alert('User updated')
                         window.location.href = `${'<%- host %>'}`;
                     }
-                    else if (res.data.status === 404) {
-
+                    else if (res.data.status === 400) {
+                        
                         window.alert(res.data.message)
                         window.location.href = `${'<%- host %>'}/updateuser/${id}`;
                     }
                     else {
                         window.alert('User Already Exist')
-                        window.location.href = `${'<%- host %>'}:5500/updateuser/${id}`;
+                        window.location.href = `${'<%- host %>'}/updateuser/${id}`;
                     }
                 }
             }

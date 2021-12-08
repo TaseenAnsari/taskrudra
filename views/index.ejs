@@ -24,7 +24,6 @@
             let data = await axios.get(`${'<%- host %>'}/api/users`)
             data = data.data;
             for(let i=0; i < data.length ;i++){
-                console.log(data[i]._id)
                 if(!data[i].status){
                     user += `
                         <li class="list-group-item">
@@ -42,7 +41,7 @@
                 else{
                     user += `
                         <li class="list-group-item">
-                            <h3>${data[i].username}</h3>
+                            <h3>#${i+1} ${data[i].username}</h3>
                             <p>${data[i].email}</p>
                             <p>
                                 <span class="text-success"> Active</span>
@@ -112,8 +111,13 @@
                  window.alert("user deleted")
 
              }
-             else if(res.data.status===400){
+             else if(res.data.status===401){
                 window.location.href = `${'<%- host %>'}`;
+             }
+             else{
+                 window.alert("Something Went Wrong");
+                 window.location.href = `${'<%- host %>'}`;
+
              }
          }
          getUsers()

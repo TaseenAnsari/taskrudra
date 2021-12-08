@@ -7,15 +7,14 @@ module.exports = async(req ,res ,next)=>{
         next()
     }
     catch(err){
-        console.log(err.message)
-        if(err.message==='"username" length must be at least 3 characters long') return res.status(200).send({status:404,message:err.message})
-        if(err.message==='"username" is not allowed to be empty') return res.status(200).send({status:404,message:err.message})
-        if(err.message==='"email" is not allowed to be empty') return res.status(200).send({status:404,message:err.message})
-        if(err.message==='"password" is not allowed to be empty') return res.status(200).send({status:404,message:err.message})
-        if(err.message==='"email" must be a valid email') return res.status(200).send({status:404,message:err.message})
-        if(err.message==='"password" length must be at least 8 characters long') return res.status(200).send({status:404,message:err.message})
-        if(err.message==='"username" must only contain alpha-numeric characters') return res.status(200).send({status:404,message:err.message})
-        res.status(200).send({status:403})
+        if(err.message==='"username" length must be at least 3 characters long') return res.send({status:404,message:err.message})
+        if(err.message==='"username" is not allowed to be empty') return res.send({status:404,message:err.message})
+        if(err.message==='"email" is not allowed to be empty') return res.send({status:404,message:err.message})
+        if(err.message==='"password" is not allowed to be empty') return res.send({status:404,message:err.message})
+        if(err.message==='"email" must be a valid email') return res.send({status:404,message:err.message})
+        if(err.message==='"password" length must be at least 8 characters long') return res.send({status:404,message:err.message})
+        if(err.message==='"username" must only contain alpha-numeric characters') return res.send({status:404,message:err.message})
+        res.send({status:403})
     }    
     
 }

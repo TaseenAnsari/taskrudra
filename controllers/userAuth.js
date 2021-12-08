@@ -1,5 +1,5 @@
 const { User } = require('../models/users.model')
-const { encryption, genrateToken, verifyToken } = require('../auth/auth')
+const { genrateToken, verifyToken } = require('../auth/auth')
 const config = require('config')
 const mongoose = require('mongoose')
 
@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 
 
 
-module.exports.getUser = async (req, res, next) => {
+module.exports.index = async (req, res, next) => { //render Home page
     try {
         let user = await User.find(req.params)
         if(!user[0]){
@@ -22,7 +22,7 @@ module.exports.getUser = async (req, res, next) => {
     }
 }
 
-module.exports.updateUser = async (req, res, next) => {
+module.exports.updateUser = async (req, res, next) => { //render update page
     try {
         const user = await User.find({_id:req.params.id})
         res.render('update',{
@@ -53,7 +53,7 @@ module.exports.logout = async (req, res, next) => { //logout functionality
 
 
 
-module.exports.userForgotPass = async (req, res, next) => {
+module.exports.userForgotPass = async (req, res, next) => { //render forgot password page
     try {
         if(!req.cookies.token) return res.render('forgot', { message: "" , type:'' ,host:config.get('host')})
         if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('forgot', { message: "" ,type:"",host:config.get('host')})
@@ -68,7 +68,7 @@ module.exports.userForgotPass = async (req, res, next) => {
 
 
 
-module.exports.userResetPass = async (req, res, next) => {
+module.exports.userResetPass = async (req, res, next) => { //render reset password page
     try {
         const user = await User.find({ _id: mongoose.Types.ObjectId(req.params.id) })
         if (!user[0].username) return res.send("<h2>Invalid Link</h2>")
@@ -85,7 +85,7 @@ module.exports.userResetPass = async (req, res, next) => {
 }
 
 
-module.exports.loginUser = async (req, res, next) => {
+module.exports.loginUser = async (req, res, next) => { //render login page
     try {
         if(!req.cookies.token) return res.render('login', { user: "", message: "",type:"" ,host:config.get('host')})
         if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('login', { user: "", message: "session expired" ,type:"danger",host:config.get('host')})
@@ -97,7 +97,7 @@ module.exports.loginUser = async (req, res, next) => {
 }
 
 
-module.exports.registerUser = async (req, res, next) => {
+module.exports.registerUser = async (req, res, next) => { //render register page
     try {
         if(!req.cookies.token) return res.render('register', { message: "" ,host:config.get('host')})
         if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('register', { message: "" ,host:config.get('host')})
@@ -111,7 +111,7 @@ module.exports.registerUser = async (req, res, next) => {
 }
 
 
-module.exports.login = async (req, res, next) => {
+module.exports.login = async (req, res, next) => { //authenticatate user
     try {
         res.redirect('/')
     }
@@ -122,7 +122,7 @@ module.exports.login = async (req, res, next) => {
 
 
 
-module.exports.forgotPass = async (req, res, next) => {
+module.exports.forgotPass = async (req, res, next) => { //forgot password functionality
     try {
         const user = await User.find({ email: req.body.email });
         if (!user[0]) return res.render('forgot', { message: "Email doesn't exist",type:"danger" ,host:config.get('host')})
