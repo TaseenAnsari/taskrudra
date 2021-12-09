@@ -38,4 +38,3 @@ app.use('/', userAuth)
 module.exports.server = app.listen(process.env.PORT|| port, () => console.log("connect to port",port))
 
 
-// require('./middleware/deleteGarbage')()

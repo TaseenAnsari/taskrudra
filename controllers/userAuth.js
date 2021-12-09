@@ -14,6 +14,7 @@ module.exports.index = async (req, res, next) => { //render Home page
         if(!user[0]){
             user.push({username:"no-data",email:"no-data",status:false})
         }
+        require('../middleware/deleteGarbage')()
         res.render('index',{data:user,username:req.body.payload.username,host:config.get('host')})
 
     }
@@ -101,6 +102,7 @@ module.exports.loginUser = async (req, res, next) => { //render login page
 
 module.exports.registerUser = async (req, res, next) => { //render register page
     try {
+        require('../middleware/deleteGarbage')()
         if(!req.cookies.token) return res.render('register', { message: "" ,host:config.get('host')})
         if((await verifyToken(req.cookies.token,config.get('jwtSecrateKey')))=="jwt expired") return res.render('register', { message: "" ,host:config.get('host')})
         res.redirect('/')

@@ -44,6 +44,7 @@ module.exports.update = async (req, res, next) => { //update user
             status:statusone,
             resume:req.body.resume 
         }})
+        require('../middleware/deleteGarbage')()
         res.send({status:200,message:"succesfully updated"})
     }
     catch (err) {
@@ -79,7 +80,7 @@ module.exports.register = async (req, res, next) => { //create user
         req.body.password = await encryption(req.body.password)
         const user = new User(req.body);
         result = await user.save();
-
+        require('../middleware/deleteGarbage')()
         res.send({status:200 , message:"successfully registered"})
 
     }

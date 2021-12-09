@@ -34,7 +34,7 @@
                                 <span class="text-danger"> De-Active</span>
                             </p>
                             <div class="row">
-                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser('${data[i]._id}')">Delete</button>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser('${data[i]._id}')" ${data[i].username==='<%- username%>'?"disabled":""}>Delete</button>
                                 <a class="btn btn-sm btn-info ml-1" href="/updateuser/${data[i]._id}">Update</a>
                             </div>
                         </li>`
@@ -52,7 +52,7 @@
 
                             </div>
                             <div class="row">
-                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser('${data[i]._id}')">Delete</button>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser('${data[i]._id}')" ${data[i].username==='<%- username%>'?"disabled":""}>Delete</button>
                                 <a class="btn btn-sm btn-info ml-1" href="/updateuser/${data[i]._id}">Update</a>
                             </div>
                         </li>`
