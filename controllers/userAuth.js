@@ -137,8 +137,9 @@ module.exports.forgotPass = async (req, res, next) => { //forgot password functi
     }
 }
 
-module.exports.upload = async(req,res,next)=>{
-    const resume = req.files
+module.exports.upload = async(req,res,next)=>{ //upload resume
+    try{
+        const resume = req.files
         if(resume){
             uploadPath = (require('../filename').dir)() + '/resume/'+ req.params.id+'_'+resume.files.name;
             resume.files.mv(uploadPath, function(err) {
@@ -149,4 +150,9 @@ module.exports.upload = async(req,res,next)=>{
                 }
               });
         }
+    }
+    catch(err){
+        return res.send({status:400,message:err.message})
+    }
+    
 }
